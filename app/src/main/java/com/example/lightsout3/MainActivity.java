@@ -4,10 +4,12 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.gridlayout.widget.GridLayout;
 
 import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 
+import java.util.Random;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -22,7 +24,7 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
                 buttons[i][j] = new Button(this);
-                buttons[i][j].setBackgroundResource(R.drawable.white);
+                buttons[i][j].setBackgroundColor(getRandomColor());
 
 
                 buttons[i][j].setOnClickListener(new View.OnClickListener()
@@ -48,6 +50,12 @@ public class MainActivity extends AppCompatActivity {
 
                         // Toggle the colors of adjacent buttons (up, down, left, and right)
                         toggleAdjacentButtons(clickedRow, clickedCol);
+
+                        // Check if the player has won (all buttons are black)
+                        if (isGameWon()) {
+                            //System.out.println("Game Won!!!!!");
+                            gridLayout.setBackgroundColor(Color.GREEN);
+                        }
                     }
 
                 });
@@ -96,18 +104,21 @@ public class MainActivity extends AppCompatActivity {
     }
 
     // Helper method to check if the player has won (all buttons are black)
-//    private boolean isGameWon() {
-//        for (int row = 0; row < 5; row++) {
-//            for (int col = 0; col < 5; col++) {
-//                if (buttons[row][col].getBackgroundColor() != Color.BLACK) {
-//                    return false;
-//                }
-//            }
-//        }
-//        return true;
-//    }
+    private boolean isGameWon() {
+        for (int row = 0; row < 5; row++) {
+            for (int col = 0; col < 5; col++) {
+                if (buttons[row][col].getBackground().equals(Color.WHITE)) {
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
 
-
+    private int getRandomColor() {
+        Random random = new Random();
+        return random.nextBoolean() ? Color.BLACK : Color.WHITE;
+    }
 
 }
 
