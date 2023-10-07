@@ -22,16 +22,34 @@ public class MainActivity extends AppCompatActivity {
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
                 buttons[i][j] = new Button(this);
-                buttons[i][j].setText("Button");
-                buttons[i][j].setOnClickListener(new View.OnClickListener() {
+                buttons[i][j].setBackgroundResource(R.drawable.white);
+
+
+                buttons[i][j].setOnClickListener(new View.OnClickListener()
+                {
                     @Override
-                    public void onClick(View v) {
-                        // Handle button click here
+                    public void onClick(View v)
+                    {
                         Button clickedButton = (Button) v;
-                        // You can perform actions based on which button was clicked
-                        // For example, change the button's text or background color
-                        clickedButton.setText("Clicked");
+                        int clickedRow = -1;
+                        int clickedCol = -1;
+                        for (int row = 0; row < 5; row++) {
+                            for (int col = 0; col < 5; col++) {
+                                if (buttons[row][col] == clickedButton) {
+                                    clickedRow = row;
+                                    clickedCol = col;
+                                    break;
+                                }
+                            }
+                        }
+
+                        // Toggle the color of the clicked button
+                        toggleButtonColor(clickedRow, clickedCol);
+
+                        // Toggle the colors of adjacent buttons (up, down, left, and right)
+                        toggleAdjacentButtons(clickedRow, clickedCol);
                     }
+
                 });
 
                 // Add the button to the GridLayout
@@ -57,6 +75,39 @@ public class MainActivity extends AppCompatActivity {
             button.setText("");
         }
     }
+
+    // Helper method to toggle the colors of adjacent buttons
+    private void toggleAdjacentButtons(int row, int col) {
+        int[][] directions = { {0, -1}, {-1, 0}, {0, 1}, {1, 0} }; // Up, Left, Down, Right
+
+        for (int[] dir : directions) {
+            int newRow = row + dir[0];
+            int newCol = col + dir[1];
+
+            if (isValidPosition(newRow, newCol)) {
+                toggleButtonColor(newRow, newCol);
+            }
+        }
+    }
+
+    // Helper method to check if a position is valid (within the grid)
+    private boolean isValidPosition(int row, int col) {
+        return row >= 0 && row < 5 && col >= 0 && col < 5;
+    }
+
+    // Helper method to check if the player has won (all buttons are black)
+//    private boolean isGameWon() {
+//        for (int row = 0; row < 5; row++) {
+//            for (int col = 0; col < 5; col++) {
+//                if (buttons[row][col].getBackgroundColor() != Color.BLACK) {
+//                    return false;
+//                }
+//            }
+//        }
+//        return true;
+//    }
+
+
 
 }
 
