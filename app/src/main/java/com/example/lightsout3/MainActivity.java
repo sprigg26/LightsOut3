@@ -9,6 +9,20 @@ import android.view.View;
 import android.widget.Button;
 import java.util.Random;
 
+/**
+ * <!-- class MainActivity -->
+ *
+ * This class implements the puzzle game: Lights Out. In the puzzle, there are 25 squares colored either white or
+ * black in a 5x5 grid. The goal is to make it so all of the squares are colored
+ * black. When the user clicks on any square, the color of that square, and the
+ * squares immediately up, left, down and right change.
+ *
+ * Dylan Sprigg
+ * October 8, 2023
+ *
+ * CS301 Computer Science
+ *
+ */
 
 public class MainActivity extends AppCompatActivity {
 
