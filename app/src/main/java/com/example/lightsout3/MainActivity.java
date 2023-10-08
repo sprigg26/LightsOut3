@@ -11,6 +11,8 @@ import java.util.Random;
 
 
 public class MainActivity extends AppCompatActivity {
+
+    //creates a 2d array to store all 25 buttons and allow for interactivity between them (toggle methods)
     Button[][] buttons = new Button[5][5];
 
     @Override
@@ -18,9 +20,16 @@ public class MainActivity extends AppCompatActivity {
     {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //calls gridLayout from xml but I needed to add libraries to support
+        // it bc gridLayout is a legacy feature
         androidx.gridlayout.widget.GridLayout gridLayout = findViewById(R.id.gridLayout);
+
+        //reset button to randomize the puzzle
         Button resetButton = findViewById(R.id.button2);
 
+        //nested for loop that creates 25 buttons, sets the onClickListener and actions,
+        // and then adds them to the gridLayout
         for (int i = 0; i < 5; i++) {
             for (int j = 0; j < 5; j++) {
                 buttons[i][j] = new Button(this);
@@ -45,14 +54,15 @@ public class MainActivity extends AppCompatActivity {
                             }
                         }
 
-                        // Toggle the color of the clicked button
+                        //changes the click button's color
                         toggleButtonColor(clickedRow, clickedCol);
 
-                        // Toggle the colors of adjacent buttons (up, down, left, and right)
+                        //changes the adjacent buttons' color (up, left, right, and down)
                         toggleAdjacentButtons(clickedRow, clickedCol);
 
-                        // Check if the player has won (all buttons are black)
+                        //checks win condition (all buttons are black)
                         if (isGameWon()) {
+                            //win condition notifier
                             gridLayout.setBackgroundColor(Color.GREEN);
                         }
                     }
@@ -62,11 +72,12 @@ public class MainActivity extends AppCompatActivity {
                 //add the buttons to the gridLayout
                 gridLayout.addView(buttons[i][j]);
 
+                //sets reset button's onClickListener
                 resetButton.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View v) {
-                        // Handle the reset button click event here
-                        resetGrid(v); // Call your resetGrid method or any other logic
+                        //reset button click event
+                        resetGrid(v);
                         gridLayout.setBackgroundColor(Color.WHITE);
 
                     }
@@ -79,6 +90,8 @@ public class MainActivity extends AppCompatActivity {
     private void toggleButtonColor(int row, int col)
     {
         Button button = buttons[row][col];
+
+        //check if the button's text is empty
         if (button.getText().toString().equals(""))
         {
             button.setBackgroundColor(Color.BLACK);
@@ -90,15 +103,22 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-    // Helper method to toggle the colors of adjacent buttons
+    //helper method to change the colors of adjacent buttons
     private void toggleAdjacentButtons(int row, int col) {
-        //acquired help from online resources for this method (stackoverflow and forums)
-        int[][] directions = { {0, -1}, {-1, 0}, {0, 1}, {1, 0} }; // Up, Left, Down, Right
+        //acquired inspiration from stackoverflow for this method
+        //Citation:
+        //Jamiec, Jan 17, 2022. "JavaScript - How to find adjacent tiles in a grid?"
+        // StackOverFlow. https://stackoverflow.com/questions/70744440/javascript-how-to-find-adjacent-tiles-in-a-grid
 
+        //creates an array of directions to represent the adjacent buttons
+        int[][] directions = { {0, -1}, {-1, 0}, {0, 1}, {1, 0} }; //up, left, down, right
+
+        //iterates through each direction (up, left, down, right)
         for (int[] dir : directions) {
             int newRow = row + dir[0];
             int newCol = col + dir[1];
 
+            //check if the new position (newRow, newCol) is a valid position in the grid
             if (isValidPosition(newRow, newCol))
             {
                 toggleButtonColor(newRow, newCol);
@@ -111,7 +131,7 @@ public class MainActivity extends AppCompatActivity {
         return row >= 0 && row < 5 && col >= 0 && col < 5;
     }
 
-    // Helper method to check if the player has won (all buttons are black)
+    //helper method to check if the player has won (all buttons are black)
     private boolean isGameWon() {
         for (int row = 0; row < 5; row++) {
             for (int col = 0; col < 5; col++) {
@@ -125,6 +145,7 @@ public class MainActivity extends AppCompatActivity {
         return true;
     }
 
+    //helper method to assign each button a random color (black or white) when initializing
     private int getRandomColor() {
         Random random = new Random();
         int randomNumber = random.nextInt(2);
@@ -138,7 +159,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
-
+    //helper method to randomize each button's color after clicking the reset button
     public void resetGrid(View v) {
         for (int row = 0; row < 5; row++) {
             for (int col = 0; col < 5; col++) {
